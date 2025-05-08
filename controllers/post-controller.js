@@ -7,7 +7,7 @@ function index(req, res) {
     connection.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: 'Database query failed' });
         res.json(results);
-})
+    })
 }
 
 function show(req, res) {
@@ -28,6 +28,13 @@ function patch(req, res) {
 
 function destroy(req, res) {
 
+    const { id } = req.params
+    const sql = "DELETE FROM posts WHERE id = ?"
+
+    connection.query(sql, [id], (err) => {
+        if (err) return res.status(500).json({ error: "Failed to delete post"})
+        res.sendStatus(204)
+    })
 }
 
 
