@@ -12,6 +12,14 @@ function index(req, res) {
 
 function show(req, res) {
 
+    const id = req.params.id
+    const sql = "SELECT * FROM posts WHERE id = ?"
+
+    connection.query(sql, [id], (err, results) => {
+        if (err) return res.status(500).json({ error: "Database query failed" })
+        if (results.length === 0) return res.status(404).json({ error: "Posts not found" })
+        res.json(results[0])
+    })
 }
 
 function store(req, res) {
@@ -32,7 +40,7 @@ function destroy(req, res) {
     const sql = "DELETE FROM posts WHERE id = ?"
 
     connection.query(sql, [id], (err) => {
-        if (err) return res.status(500).json({ error: "Failed to delete post"})
+        if (err) return res.status(500).json({ error: "Failed to delete post" })
         res.sendStatus(204)
     })
 }
